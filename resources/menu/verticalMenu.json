@@ -1,0 +1,46 @@
+{
+    "menu": [
+        {
+            "menuHeader": "Management"
+        },
+        {
+            "url": "/",
+            "name": "Home",
+            "icon": "menu-icon tf-icons bx bx-sm bx-home",
+            "slug": "dashboard"
+        },
+        {
+            "name": "Deposit",
+            "icon": "menu-icon tf-icons bx bx-sm bx-cloud-upload",
+            "slug": "accounts.deposit.create",
+            "url": "/deposit"
+        },
+        {
+            "name": "Withdraw",
+            "icon": "menu-icon tf-icons bx bx-sm bx-cloud-download",
+            "slug": "accounts.withdraw.create",
+            "url": "/withdraw"
+        },
+        {
+            "name": "Transfer",
+            "icon": "menu-icon tf-icons bx bx-sm bx-transfer",
+            "slug": "accounts.transfer.create",
+            "url": "/transfer"
+        },
+        {
+            "name": "Statement",
+            "icon": "menu-icon tf-icons bx bx-sm bx-file",
+            "slug": "statement",
+            "url": "/statement"
+        },
+        {
+            "menuHeader": "User"
+        },
+        {
+            "name": "Logout",
+            "icon": "menu-icon tf-icons bx bx-sm bx-log-out",
+            "slug": "logout",
+            "url": "/logout"
+        }
+    ]
+}
