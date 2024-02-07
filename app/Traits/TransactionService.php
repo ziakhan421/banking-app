@@ -11,15 +11,16 @@ trait TransactionService
      * @param $type
      * @param $amount
      * @param $action
+     * @param null $receiver
      * @return void
      */
-    public function logTransaction($user, $type, $amount, $action): void
+    public function logTransaction($user, $type, $amount, $action, $receiver = null): void
     {
         $description = match ($action) {
             'deposit' => 'Deposit',
             'withdraw' => 'Withdraw',
-            'transferFrom' => 'Transfer from ' . $user->email,
-            'transferTo' => 'Transfer to ' . $user->email,
+            'transferFrom' => 'Transfer from ' . $receiver->email,
+            'transferTo' => 'Transfer to ' . $receiver->email,
             default => '',
         };
 

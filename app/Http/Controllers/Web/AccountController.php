@@ -62,11 +62,11 @@ class AccountController extends Controller
 
         //update amount
         $userAccount->update([
-            'balance' => $userAccount->balance + $request->amount,
+            'balance' => $userAccount->balance + $request->get('amount', 0),
         ]);
 
         //log transaction history
-        $this->logTransaction($user, 'credit', $request->amount, 'deposit');
+        $this->logTransaction($user, 'credit', $request->get('amount', 0), 'deposit');
 
         return redirect()->back()->with('success', "Amount deposited successfully.");
     }
@@ -93,18 +93,20 @@ class AccountController extends Controller
         //get user account detail
         $userAccount = $user->account;
 
+        $requestAmount = $request->get('amount', 0);
+
         //show error if user balance is lower than requested amount.
-        if ($request->amount > $userAccount->balance) {
+        if ($requestAmount > $userAccount->balance) {
             return redirect()->back()->withErrors(['amount' => 'Insufficient balance.'])->withInput();
         }
 
         //update amount
         $userAccount->update([
-            'balance' => $userAccount->balance - $request->amount,
+            'balance' => $userAccount->balance - $requestAmount,
         ]);
 
         //log transaction history
-        $this->logTransaction($user, 'debit', $request->amount, 'withdraw');
+        $this->logTransaction($user, 'debit', $requestAmount, 'withdraw');
 
         return redirect()->back()->with('success', "Amount withdrawal successfully.");
     }
@@ -136,24 +138,26 @@ class AccountController extends Controller
         $receiver = $userRepository->allQuery()->with('account')->where('email', $request->email)->first();
         $receiverAccount = $receiver->account;
 
+        $requestAmount = $request->get('amount', 0);
+
         //show error if user balance is lower than requested amount.
-        if ($request->amount > $userAccount->balance) {
+        if ($requestAmount > $userAccount->balance) {
             return redirect()->back()->withErrors(['amount' => 'Insufficient balance.'])->withInput();
         }
 
         //update current user amount
         $userAccount->update([
-            'balance' => $userAccount->balance - $request->amount,
+            'balance' => $userAccount->balance - $requestAmount,
         ]);
         //log current user transaction history
-        $this->logTransaction($user, 'debit', $request->amount, 'transferTo');
+        $this->logTransaction($user, 'debit', $requestAmount, 'transferTo', $receiver);
 
         //update receiver user amount
         $receiverAccount->update([
-            'balance' => $receiverAccount->balance + $request->amount,
+            'balance' => $receiverAccount->balance + $requestAmount,
         ]);
         //log receiver transaction history
-        $this->logTransaction($receiver, 'credit', $request->amount, 'transferFrom');
+        $this->logTransaction($receiver, 'credit', $requestAmount, 'transferFrom', $user);
 
         return redirect()->back()->with('success', "Amount transferred successfully.");
     }
